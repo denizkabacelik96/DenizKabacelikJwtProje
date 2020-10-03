@@ -7,11 +7,11 @@ using System.Text;
 
 namespace DenizKabacelik.JwtProje.Bussiness.Concrete
 {
-   public  class ProductMananger:GenericManager<Product>,IProductService
+   public  class ProductManager:GenericManager<Product>,IProductService
     {
         private readonly IProductDal _productDal;
 
-        public ProductMananger(IGenericDal<Product> genericDal,
+        public ProductManager(IGenericDal<Product> genericDal,
              IProductDal productDal) :base(genericDal)
         {
             _productDal = productDal;

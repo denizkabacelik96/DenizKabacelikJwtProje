@@ -11,6 +11,10 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using DenizKabacelik.JwtProje.Bussiness.ValidationRules.FluentValidation;
+using DenizKabacelik.JwtProje.Entities.Dtos.ProductDtos;
+using DenizKabacelik.JwtProje.Entities.Dtos.AppUserDtos;
+using DenizKabacelik.JwtProje.Bussiness.ValidationRules;
 
 namespace DenizKabacelik.JwtProje.Bussiness.Containers.MicrosoftIoc
 {
@@ -23,7 +27,7 @@ namespace DenizKabacelik.JwtProje.Bussiness.Containers.MicrosoftIoc
             services.AddScoped(typeof(IGenericService<>), typeof(GenericManager<>));
             services.AddScoped(typeof(IGenericDal<>), typeof(EfGenericRepository<>));
             services.AddScoped<IProductDal, EfProductRepository>();
-            services.AddScoped<IProductService, ProductMananger>();
+            services.AddScoped<IProductService, ProductManager>();
             services.AddScoped<IAppUserDal, EfAppUserRepository>();
             services.AddScoped<IAppUserService, AppUserManager>();
 
@@ -31,7 +35,10 @@ namespace DenizKabacelik.JwtProje.Bussiness.Containers.MicrosoftIoc
             services.AddScoped<IAppRoleService, AppRoleManager>();
             services.AddScoped<IAppUserRoleDal, EfAppUserRoleRepository>();
             services.AddScoped<IAppUserRoleService, AppUserRoleManager>();
+            services.AddScoped<IJwtService, JwtManager>();
             services.AddTransient<IValidator<ProductAddDto>, ProductAddDtoValidator>();
+            services.AddTransient<IValidator<ProductUpdateDto>, ProductUpdateDtoValidator>();
+            services.AddTransient<IValidator<AppUserLoginDto>, AppUserLoginDtovalidator>();
         }
 
     }

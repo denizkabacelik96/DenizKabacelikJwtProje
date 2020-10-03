@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using DenizKabacelik.JwtProje.Bussiness.Interfaces;
 using DenizKabacelik.JwtProje.Entities.Concrete;
 using DenizKabacelik.JwtProje.Entities.Dtos.ProductDtos;
 using DenizKabacelik.JwtProje.WebApi.CustomFilters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+using DenizKabacelik.JwtProje.Entities.Dtos.ProductDtos;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace DenizKabacelik.JwtProje.WebApi.Controllers
 {
@@ -17,8 +21,12 @@ namespace DenizKabacelik.JwtProje.WebApi.Controllers
     {
 
         private readonly IProductService _productService;
-            public ProductsController(IProductService productService)
+        private readonly IMapper _mapper;
+            
+            public ProductsController(IProductService productService,IMapper mapper)
         {
+
+            _mapper = mapper;
             _productService = productService;
         }
 
@@ -48,7 +56,7 @@ namespace DenizKabacelik.JwtProje.WebApi.Controllers
 
 
          
-                await _productService.Add(new Product { Name = productAddDto.Name });
+                await _productService.Add(_mapper.Map<Product>(productAddDto));
                 return Created("", productAddDto);
 
           
@@ -57,9 +65,9 @@ namespace DenizKabacelik.JwtProje.WebApi.Controllers
 
         [HttpPut]
         [ServiceFilter(typeof(ValidId<Product>))]
-        public async Task<IActionResult> Update(Product product) {
+        public async Task<IActionResult> Update(ProductUpdateDto productUpdateDto) {
 
-            await _productService.Update(product);
+            await _productService.Update(_mapper.Map<Product>(productUpdateDto));
             return NoContent();
         
         }
@@ -79,6 +87,17 @@ namespace DenizKabacelik.JwtProje.WebApi.Controllers
 
             return Ok();
 
+        }
+
+
+        [Route("/Error")]
+
+        public IActionResult Error() {
+
+
+            var errorInfo=HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
+            return Problem(detail: "Api'de bir hata oluştu,en kısa zamanda düzeltilecek ");    
         }
     }
     
